@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { recordEvent } from "@/lib/event-store";
 
 /**
  * Telegram notification endpoint.
@@ -33,15 +34,21 @@ function escapeMarkdown(text: string): string {
   return text;
 }
 
-function buildMessage(body: NotifyBody, meta: Record<string, string>): string {
-  const time = new Date().toLocaleString("ru-RU", {
-    timeZone: "Europe/Moscow",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+function buildMessage(
+  body: NotifyBody,
+  meta: Record<string, string>,
+  timestamp?: string
+): string {
+  const time =
+    timestamp ??
+    new Date().toLocaleString("ru-RU", {
+      timeZone: "Europe/Moscow",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   const eventLabel =
     body.event === "widget_click" ? "🔴 Виджет связи" : "🎯 Кнопка «Записаться»";
@@ -122,8 +129,27 @@ export async function POST(req: Request) {
   // Client can hint its screen via query (?screen=390x844) but we don't rely on it.
   const screen = new URL(req.url).searchParams.get("screen") || "";
 
-  const text = buildMessage(body, { device, screen });
+  // Build a timestamp once for both the Telegram message and the stored event.
+  const timestamp = new Date().toLocaleString("ru-RU", {
+    timeZone: "Europe/Moscow",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const text = buildMessage(body, { device, screen }, timestamp);
   const result = await sendTelegram(text);
+
+  // Always record the event for the /admin dashboard (fire-and-forget).
+  await recordEvent({
+    type: body.event,
+    channel: body.channel,
+    context: body.context,
+    device,
+    time: timestamp,
+  });
 
   if (!result.ok) {
     // Don't fail loudly — log but respond 200 so the client doesn't retry.
