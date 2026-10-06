@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { getChannels, STUDIO } from "@/lib/contacts";
 import { trackButtonClick, trackWidgetClick } from "@/lib/analytics";
-import { VkIcon, WhatsappIcon, TelegramIcon, PhoneIcon, CloseIcon } from "./icons";
+import { VkIcon, TelegramIcon, PhoneIcon, CloseIcon } from "./icons";
 
 type Source = "button" | "vid";
 
@@ -105,7 +105,6 @@ export function ContactModal({
                 "
               >
                 {c.icon === "vk" && <VkIcon className="h-6 w-6" />}
-                {c.icon === "whatsapp" && <WhatsappIcon className="h-6 w-6" />}
                 {c.icon === "telegram" && <TelegramIcon className="h-6 w-6" />}
                 {c.icon === "phone" && <PhoneIcon className="h-5 w-5" />}
               </span>
