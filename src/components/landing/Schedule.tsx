@@ -149,7 +149,7 @@ export function Schedule() {
             Можно прийти на одно занятие или на все. Билет на день открытых
             дверей действует на всю программу — 590 ₽ за 15 часов.
           </p>
-          <ContactButton size="lg" modalTitle="Записаться на день открытых дверей">
+          <ContactButton size="lg" context="schedule" modalTitle="Записаться на день открытых дверей">
             Записаться
           </ContactButton>
         </div>

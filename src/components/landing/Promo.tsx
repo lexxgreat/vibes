@@ -153,7 +153,7 @@ export function Promo() {
           <p className="font-display text-2xl uppercase tracking-wide text-white sm:text-3xl">
             Записывайся — места ограничены
           </p>
-          <ContactButton size="lg" modalTitle="Записаться и применить промокод">
+          <ContactButton size="lg" context="promo" modalTitle="Записаться и применить промокод">
             Записаться
           </ContactButton>
           <p className="text-xs uppercase tracking-[0.2em] text-white/40">

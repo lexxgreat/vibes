@@ -37,7 +37,7 @@ export function ContactModal({
   const handleClick = useCallback(
     (channelId: string) => {
       if (source === "button") {
-        trackButtonClick(channelId);
+        trackButtonClick(channelId, `modal_${channelId}`);
       } else {
         trackWidgetClick(channelId);
       }

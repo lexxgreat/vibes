@@ -12,7 +12,7 @@ import { VkIcon, TelegramIcon, PhoneIcon, MapPinIcon } from "./icons";
  * so the studio can see which footer channel gets used.
  */
 export function Footer() {
-  const trackChannel = (id: string) => trackButtonClick(`footer_${id}`);
+  const trackChannel = (id: string) => trackButtonClick(id, "footer");
 
   return (
     <footer

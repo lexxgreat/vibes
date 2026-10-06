@@ -124,7 +124,7 @@ export function DanceStyles() {
               Напиши нам — поможем подобрать направление и группу под твой уровень.
             </p>
           </div>
-          <ContactButton size="md" modalTitle="Помогите выбрать направление">
+          <ContactButton size="md" context="styles" modalTitle="Помогите выбрать направление">
             Подобрать направление
           </ContactButton>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { trackButtonClick } from "@/lib/analytics";
 import { useContactStore } from "./use-contact";
 import type { ButtonHTMLAttributes } from "react";
 
@@ -16,6 +17,11 @@ export interface ContactButtonProps
   size?: "sm" | "md" | "lg";
   /** Override modal title (e.g. "Записаться на пробное") */
   modalTitle?: string;
+  /**
+   * Where the button lives — used as context in the Telegram notification.
+   * Examples: "hero", "navbar", "schedule".
+   */
+  context?: string;
 }
 
 /**
@@ -29,6 +35,7 @@ export function ContactButton({
   variant = "primary",
   size = "md",
   modalTitle,
+  context = "cta",
   className,
   children,
   onClick,
@@ -54,9 +61,12 @@ export function ContactButton({
     <button
       type="button"
       data-track="button"
+      data-context={context}
       onClick={(e) => {
         onClick?.(e);
         if (!e.defaultPrevented) {
+          // Fire Yandex.Metrika + Telegram notification with context.
+          trackButtonClick(context, context);
           openContact("button", modalTitle);
         }
       }}

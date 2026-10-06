@@ -53,7 +53,7 @@ export function SocialLinks({
           data-track="button"
           data-channel={c.id}
           data-context={context}
-          onClick={() => trackButtonClick(`${context}_${c.id}`)}
+          onClick={() => trackButtonClick(c.id, context)}
           className={`
             grid place-items-center rounded-full border border-white/15 bg-black/30
             text-white/80 backdrop-blur-sm transition-all

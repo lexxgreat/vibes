@@ -65,7 +65,7 @@ export function FinalCTA() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-4">
-          <ContactButton size="lg" modalTitle="Записаться на день открытых дверей">
+          <ContactButton size="lg" context="finalcta" modalTitle="Записаться на день открытых дверей">
             Записаться на день открытых дверей
           </ContactButton>
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/45">

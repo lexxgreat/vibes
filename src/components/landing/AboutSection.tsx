@@ -84,7 +84,7 @@ export function AboutSection() {
           </div>
 
           <div className="mt-8">
-            <ContactButton size="md" modalTitle="Записаться на пробное">
+            <ContactButton size="md" context="about" modalTitle="Записаться на пробное">
               Хочу на пробное
             </ContactButton>
           </div>

@@ -119,7 +119,7 @@ export function Hero() {
               className="fade-up mt-4 flex flex-wrap items-center gap-2 sm:mt-6 sm:gap-3"
               style={{ animationDelay: "0.4s" }}
             >
-              <ContactButton size="lg" modalTitle="Записаться на день открытых дверей">
+              <ContactButton size="lg" context="hero" modalTitle="Записаться на день открытых дверей">
                 Записаться
               </ContactButton>
               <a

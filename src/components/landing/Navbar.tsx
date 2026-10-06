@@ -105,7 +105,7 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden shrink-0 md:block">
-          <ContactButton size="sm" modalTitle="Записаться на день открытых дверей">
+          <ContactButton size="sm" context="navbar" modalTitle="Записаться на день открытых дверей">
             Записаться
           </ContactButton>
         </div>
@@ -155,7 +155,7 @@ export function Navbar() {
             </a>
           ))}
           <div className="mt-2 px-3 pb-2">
-            <ContactButton size="md" className="w-full">
+            <ContactButton size="md" context="mobile_menu" className="w-full">
               Записаться
             </ContactButton>
           </div>
