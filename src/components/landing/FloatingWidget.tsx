@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useContactStore } from "./use-contact";
+import { getChannels } from "@/lib/contacts";
 import { trackWidgetClick } from "@/lib/analytics";
 import { VkIcon, TelegramIcon, PhoneIcon, CloseIcon } from "./icons";
 
@@ -17,18 +17,29 @@ const CHANNELS: { id: Channel; label: string; color: string }[] = [
  * Floating contact widget — bottom-right.
  *
  * Behaviour:
- * - Idle: a circular button that cycles VK → WhatsApp → Phone icons
- *   every ~2.2s. Data-track="vid" for analytics.
- * - On click: expands into a small radial menu of channels + fires
- *   `widget_click` Yandex.Metrika goal (shared event).
- * - Each channel click opens the URL with ?ref=vid appended (see lib/contacts).
+ * - Idle: a circular button that cycles VK → Telegram → Phone icons
+ *   every ~2.2s. data-track="vid".
+ * - Click on FAB: expands into a list of direct channel buttons.
+ *   This counts as a `widget_click` conversion (user showed intent).
+ * - Click on a channel: opens the messenger DIRECTLY (VK / Telegram / Phone).
+ *   No extra modal — channels ARE the choice.
+ *   Fires `widget_click` again with the channel id for analytics.
  */
 export function FloatingWidget() {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState<Channel>("vk");
-  const openContact = useContactStore((s) => s.openContact);
 
-  // Cycle the idle icon
+  // Resolve channel URLs once (with ?ref=vid appended).
+  const channelUrls: Record<Channel, string> = CHANNELS.reduce(
+    (acc, c) => {
+      const found = getChannels("vid").find((ch) => ch.id === c.id);
+      acc[c.id] = found?.href ?? "#";
+      return acc;
+    },
+    {} as Record<Channel, string>
+  );
+
+  // Cycle the idle icon.
   useEffect(() => {
     if (open) return;
     const interval = setInterval(() => {
@@ -40,21 +51,29 @@ export function FloatingWidget() {
     return () => clearInterval(interval);
   }, [open]);
 
-  // (auto-open hint disabled — it was pushing the FAB off-screen on mobile)
-
   const toggleOpen = () => {
     const next = !open;
     setOpen(next);
     if (next) {
-      // The very act of opening the widget already counts as a conversion event
+      // The very act of opening the widget already counts as a conversion event.
       trackWidgetClick("open");
     }
   };
 
-  const handleChannel = (id: Channel) => {
+  /**
+   * Open the channel directly — no extra modal.
+   * Each channel in the widget IS the final choice.
+   */
+  const openChannel = (id: Channel) => {
+    const url = channelUrls[id];
+    // Fire conversion event (channel-specific).
     trackWidgetClick(id);
-    openContact("vid", "Связаться через виджет");
+    // Close the widget first so the user sees where they landed.
     setOpen(false);
+    // Open the messenger (new tab for VK/TG, same tab for tel: link).
+    if (typeof window !== "undefined") {
+      window.open(url, id === "phone" ? "_self" : "_blank", "noopener,noreferrer");
+    }
   };
 
   return (
@@ -65,7 +84,7 @@ export function FloatingWidget() {
       "
       data-track-container="vid"
     >
-      {/* Channel chips (above the main button) */}
+      {/* Channel buttons (above the main FAB) */}
       <div
         className={`
           flex flex-col items-end gap-2 transition-all duration-300
@@ -78,9 +97,10 @@ export function FloatingWidget() {
           <button
             key={c.id}
             type="button"
-            onClick={() => handleChannel(c.id)}
+            onClick={() => openChannel(c.id)}
             data-track="vid"
             data-channel={c.id}
+            aria-label={c.label}
             className="
               group flex items-center gap-3 rounded-full border border-white/10
               bg-[#141414]/95 backdrop-blur-sm pr-5 pl-2 py-2 shadow-lg

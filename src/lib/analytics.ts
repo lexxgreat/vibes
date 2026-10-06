@@ -83,11 +83,17 @@ export function trackButtonClick(label?: string, context?: string) {
  * Track the floating widget interaction:
  *  - reachGoal("widget_click")
  *  - send Telegram notification
+ *
+ * label semantics:
+ *  - "open"  → user expanded the widget (channel = undefined, context = "Виджет раскрыт")
+ *  - "vk" | "telegram" | "phone" → user clicked a specific channel (final conversion)
  */
 export function trackWidgetClick(label?: string) {
-  const channel = label && label !== "open" ? label : undefined;
+  const isOpen = label === "open";
+  const channel = label && !isOpen ? label : undefined;
+  const context = isOpen ? "Виджет раскрыт" : "Виджет — выбор канала";
   reachGoal("widget_click", label ? { label } : undefined);
-  void notifyTelegram({ event: "widget_click", channel });
+  void notifyTelegram({ event: "widget_click", channel, context });
 }
 
 /**
