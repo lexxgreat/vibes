@@ -1,11 +1,19 @@
+"use client";
+
 import { STUDIO } from "@/lib/contacts";
-import { VkIcon, WhatsappIcon, PhoneIcon, MapPinIcon } from "./icons";
+import { trackButtonClick } from "@/lib/analytics";
+import { VkIcon, WhatsappIcon, TelegramIcon, PhoneIcon, MapPinIcon } from "./icons";
 
 /**
  * Sticky footer — pinned to bottom of the page.
  * Contains brand, contacts, copyright. Mobile-safe.
+ *
+ * All contact links fire the shared `button_click` Yandex.Metrika goal
+ * so the studio can see which footer channel gets used.
  */
 export function Footer() {
+  const trackChannel = (id: string) => trackButtonClick(`footer_${id}`);
+
   return (
     <footer
       className="
@@ -13,7 +21,7 @@ export function Footer() {
       "
     >
       <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8">
-        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1.3fr]">
           {/* Brand */}
           <div>
             <a href="#top" className="flex items-baseline gap-1.5">
@@ -54,7 +62,7 @@ export function Footer() {
             <a href="#promo" className="text-sm text-white/70 transition-colors hover:text-[#e91e8c]">Акции</a>
           </nav>
 
-          {/* Contacts */}
+          {/* Contacts — tracked as button_click */}
           <div className="flex flex-col gap-3">
             <p className="font-display text-xs uppercase tracking-[0.3em] text-white/40">
               Контакты
@@ -63,6 +71,8 @@ export function Footer() {
               href={STUDIO.vkGroupUrl}
               target="_blank"
               rel="noopener noreferrer"
+              data-track="button"
+              onClick={() => trackChannel("vk")}
               className="group inline-flex items-center gap-3 text-sm text-white/70 transition-colors hover:text-[#e91e8c]"
             >
               <VkIcon className="h-5 w-5" />
@@ -72,13 +82,28 @@ export function Footer() {
               href={`https://wa.me/${STUDIO.whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
+              data-track="button"
+              onClick={() => trackChannel("whatsapp")}
               className="group inline-flex items-center gap-3 text-sm text-white/70 transition-colors hover:text-[#e91e8c]"
             >
               <WhatsappIcon className="h-5 w-5" />
-              {STUDIO.phoneDisplay}
+              WhatsApp
+            </a>
+            <a
+              href={STUDIO.telegramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="button"
+              onClick={() => trackChannel("telegram")}
+              className="group inline-flex items-center gap-3 text-sm text-white/70 transition-colors hover:text-[#e91e8c]"
+            >
+              <TelegramIcon className="h-5 w-5" />
+              Telegram
             </a>
             <a
               href={`tel:${STUDIO.phoneTel}`}
+              data-track="button"
+              onClick={() => trackChannel("phone")}
               className="group inline-flex items-center gap-3 text-sm text-white/70 transition-colors hover:text-[#e91e8c]"
             >
               <PhoneIcon className="h-5 w-5" />

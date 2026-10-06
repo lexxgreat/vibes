@@ -1,5 +1,6 @@
 import { STUDIO } from "@/lib/contacts";
 import { ContactButton } from "./ContactButton";
+import { SocialLinks } from "./SocialLinks";
 import { CalendarIcon, SparkleIcon, MapPinIcon } from "./icons";
 
 /**
@@ -70,6 +71,14 @@ export function FinalCTA() {
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/45">
             <CalendarIcon className="h-3.5 w-3.5" />
             Ответим в течение нескольких минут
+          </div>
+
+          {/* Direct messenger quick-links */}
+          <div className="mt-2 flex flex-col items-center gap-3">
+            <span className="font-display text-[10px] uppercase tracking-[0.25em] text-white/40">
+              или напиши сразу
+            </span>
+            <SocialLinks context="finalcta" />
           </div>
         </div>
       </div>

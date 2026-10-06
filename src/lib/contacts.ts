@@ -11,6 +11,8 @@ export const STUDIO = {
   addressFull: "г. Пермь, ул. Седова, 22",
   mapsUrl: "https://yandex.ru/maps/?text=Пермь,Седова 22",
   vkGroupUrl: "https://vk.ru/vbsdanceperm",
+  telegramHandle: "borisenkosanya",
+  telegramUrl: "https://t.me/borisenkosanya",
   dodDate: "10–11 октября",
   dodPrice: "590 ₽",
   dodHours: "15 часов танцев",
@@ -22,11 +24,11 @@ export const STUDIO = {
 };
 
 export type ContactChannel = {
-  id: "vk" | "whatsapp" | "phone";
+  id: "vk" | "whatsapp" | "telegram" | "phone";
   label: string;
   description: string;
   href: string;
-  icon: "vk" | "whatsapp" | "phone";
+  icon: "vk" | "whatsapp" | "telegram" | "phone";
 };
 
 /**
@@ -57,6 +59,13 @@ export const getChannels = (ref: "button" | "vid"): ContactChannel[] => [
       ref
     ),
     icon: "whatsapp",
+  },
+  {
+    id: "telegram",
+    label: "Telegram",
+    description: `@${STUDIO.telegramHandle}`,
+    href: withRef(STUDIO.telegramUrl, ref),
+    icon: "telegram",
   },
   {
     id: "phone",

@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { useContactStore } from "./use-contact";
 import { trackWidgetClick } from "@/lib/analytics";
-import { VkIcon, WhatsappIcon, PhoneIcon, CloseIcon } from "./icons";
+import { VkIcon, WhatsappIcon, TelegramIcon, PhoneIcon, CloseIcon } from "./icons";
 
-type Channel = "vk" | "whatsapp" | "phone";
+type Channel = "vk" | "whatsapp" | "telegram" | "phone";
 
 const CHANNELS: { id: Channel; label: string; color: string }[] = [
   { id: "vk", label: "ВКонтакте", color: "#0077FF" },
   { id: "whatsapp", label: "WhatsApp", color: "#25D366" },
+  { id: "telegram", label: "Telegram", color: "#229ED9" },
   { id: "phone", label: "Позвонить", color: "#e91e8c" },
 ];
 
@@ -60,7 +61,7 @@ export function FloatingWidget() {
   return (
     <div
       className="
-        fixed bottom-20 right-4 z-[60] flex flex-col items-end gap-2
+        fixed bottom-24 right-4 z-[60] flex flex-col items-end gap-2
         sm:bottom-6 sm:right-6 sm:gap-3
       "
       data-track-container="vid"
@@ -94,6 +95,7 @@ export function FloatingWidget() {
             >
               {c.id === "vk" && <VkIcon className="h-5 w-5" />}
               {c.id === "whatsapp" && <WhatsappIcon className="h-5 w-5" />}
+              {c.id === "telegram" && <TelegramIcon className="h-5 w-5" />}
               {c.id === "phone" && <PhoneIcon className="h-4 w-4" />}
             </span>
             <span className="font-display text-sm uppercase tracking-[0.15em] text-white">
@@ -127,6 +129,7 @@ export function FloatingWidget() {
         <span className="relative grid place-items-center transition-all">
           {current === "vk" && <VkIcon className="h-7 w-7" />}
           {current === "whatsapp" && <WhatsappIcon className="h-7 w-7" />}
+          {current === "telegram" && <TelegramIcon className="h-7 w-7" />}
           {current === "phone" && <PhoneIcon className="h-6 w-6" />}
         </span>
         {/* Close X overlay when open */}
