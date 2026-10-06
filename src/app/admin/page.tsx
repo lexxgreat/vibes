@@ -221,34 +221,25 @@ export default function AdminPage() {
             </h2>
             <p className="mt-2 text-sm text-white/80">
               Чтобы видеть статистику на этой странице, нужно подключить
-              бесплатную базу данных Supabase. Без неё уведомления в
-              Telegram приходят, но дашборд не работает.
+              бесплатную базу данных Supabase.
             </p>
             <ol className="mt-4 space-y-2 text-sm text-white/80 list-decimal pl-5">
-              <li>
-                Зайди на{" "}
-                <a
-                  className="text-[#e91e8c] underline"
-                  href="https://supabase.com/dashboard"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  supabase.com/dashboard
-                </a>{" "}
-                → New Project (бесплатно)
-              </li>
-              <li>Назови проект <code className="bg-black/40 px-1 rounded">vibes</code>, регион Frankfurt</li>
+              <li>Создай проект на <a className="text-[#e91e8c] underline" href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer">supabase.com</a> (бесплатно, регион Frankfurt)</li>
               <li>В Supabase открой <b>SQL Editor</b> → вставь содержимое файла <code className="bg-black/40 px-1 rounded">supabase-schema.sql</code> из репо → <b>Run</b></li>
+              <li>Также выполни в SQL Editor:
+                  <pre className="bg-black/40 p-2 rounded mt-1 text-xs">CREATE POLICY "anon can insert" ON public.conversion_events FOR INSERT TO anon WITH CHECK (true);
+CREATE POLICY "anon can select" ON public.conversion_events FOR SELECT TO anon USING (true);</pre>
+              </li>
               <li>Открой <b>Settings → API</b>, скопируй:
                 <ul className="mt-1 ml-4 list-disc">
                   <li><b>Project URL</b></li>
-                  <li><b>service_role</b> secret key (НЕ anon!)</li>
+                  <li><b>anon publishable</b> ключ</li>
                 </ul>
               </li>
               <li>В Vercel: <b>Settings → Environment Variables</b>, добавь:
                 <ul className="mt-1 ml-4 list-disc">
                   <li><code className="bg-black/40 px-1 rounded">NEXT_PUBLIC_SUPABASE_URL</code> = Project URL</li>
-                  <li><code className="bg-black/40 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> = service_role key</li>
+                  <li><code className="bg-black/40 px-1 rounded">SUPABASE_KEY</code> = anon publishable ключ</li>
                   <li><code className="bg-black/40 px-1 rounded">ADMIN_TOKEN</code> = любой сложный пароль</li>
                 </ul>
               </li>

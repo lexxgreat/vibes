@@ -40,3 +40,17 @@ create policy "service role can do everything"
 -- 4. Done ---------------------------------------------------------------------
 -- Verify with:
 --   select count(*) from public.conversion_events;
+
+-- 5. Allow anon (publishable key) to insert + select ------------------------
+-- Needed because we use the publishable key, not service_role.
+DROP POLICY IF EXISTS "anon can insert" ON public.conversion_events;
+CREATE POLICY "anon can insert"
+  ON public.conversion_events
+  FOR INSERT TO anon
+  WITH CHECK (true);
+
+DROP POLICY IF EXISTS "anon can select" ON public.conversion_events;
+CREATE POLICY "anon can select"
+  ON public.conversion_events
+  FOR SELECT TO anon
+  USING (true);

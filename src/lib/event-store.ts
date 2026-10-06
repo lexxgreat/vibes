@@ -17,7 +17,11 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
  */
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+// We use the publishable (anon) key — the conversion_events table has RLS
+// policies allowing anon to insert/select (see supabase-schema.sql + the
+// extra policies added manually). This is safe: no personal data is stored,
+// and /api/stats is protected by ADMIN_TOKEN.
+const SUPABASE_KEY = process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 let client: SupabaseClient | null = null;
 function getClient(): SupabaseClient | null {
