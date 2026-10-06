@@ -60,12 +60,10 @@ export function FloatingWidget() {
   return (
     <div
       className="
-        fixed right-4 z-[60] flex flex-col items-end gap-2
-        sm:right-6 sm:gap-3
+        fixed bottom-20 right-4 z-[60] flex flex-col items-end gap-2
+        sm:bottom-6 sm:right-6 sm:gap-3
       "
-      style={{
-        bottom: "max(env(safe-area-inset-bottom, 0px), 1rem)",
-      }}
+      data-track-container="vid"
     >
       {/* Channel chips (above the main button) */}
       <div
