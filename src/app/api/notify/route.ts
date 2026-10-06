@@ -50,23 +50,26 @@ function buildMessage(body: NotifyBody, meta: Record<string, string>): string {
     vk: "ВКонтакте",
     telegram: "Telegram",
     phone: "Телефон",
+    whatsapp: "WhatsApp",
   };
   const channelText = body.channel
     ? channelLabels[body.channel] ?? body.channel
     : "—";
 
+  // Plain text — no Markdown formatting.
+  // Telegram Markdown breaks on user-supplied values containing _ or *.
   const lines = [
-    `💃 *VIBES — новая конверсия!*`,
+    `💃 VIBES — новая конверсия!`,
     ``,
-    `*Тип:* ${eventLabel}`,
-    `*Канал:* ${channelText}`,
+    `Тип: ${eventLabel}`,
+    `Канал: ${channelText}`,
   ];
   if (body.context) {
-    lines.push(`*Блок:* ${body.context}`);
+    lines.push(`Блок: ${body.context}`);
   }
-  lines.push(`*Время:* ${time}`);
-  if (meta.device) lines.push(`*Устройство:* ${meta.device}`);
-  if (meta.screen) lines.push(`*Экран:* ${meta.screen}`);
+  lines.push(`Время: ${time}`);
+  if (meta.device) lines.push(`Устройство: ${meta.device}`);
+  if (meta.screen) lines.push(`Экран: ${meta.screen}`);
 
   return lines.join("\n");
 }
@@ -84,7 +87,8 @@ async function sendTelegram(text: string): Promise<{ ok: boolean; error?: string
         body: JSON.stringify({
           chat_id: CHAT_ID,
           text,
-          parse_mode: "Markdown",
+          // No parse_mode — text is plain, avoids Telegram's Markdown parser
+          // choking on user-supplied values containing _ or *.
           disable_web_page_preview: true,
         }),
       }
