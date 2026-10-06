@@ -1,23 +1,34 @@
-import { kv } from "@vercel/kv";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 /**
- * Event storage backed by Vercel KV.
+ * Event storage backed by Supabase (PostgreSQL).
  *
- * Two storage strategies:
- *   1. Append raw events to a Redis list for the "recent" feed.
- *   2. Increment counters for aggregates (total / byType / byChannel / byContext / byDay).
+ * Reads /api/notify inserts each conversion event here.
+ * /api/stats reads aggregates (counts by type/channel/context/day + recent feed).
  *
- * If KV is not configured (kv is null), all methods are no-ops.
+ * Required env vars:
+ *   - NEXT_PUBLIC_SUPABASE_URL  — Project URL from Supabase dashboard
+ *   - SUPABASE_SERVICE_ROLE_KEY — service role key (server-side only, never
+ *                                 exposed to client). Used for both write
+ *                                 and read; safe because /api/notify and
+ *                                 /api/stats are protected server endpoints.
+ *
+ * If env vars are missing, all methods return safe defaults (no-op).
  */
 
-const RECENT_KEY = "vibes:events:recent";
-const RECENT_MAX = 100;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const COUNTER_TOTAL = "vibes:stats:total";
-const COUNTER_TYPE = "vibes:stats:type";   // hash: type -> count
-const COUNTER_CHANNEL = "vibes:stats:channel";  // hash: channel -> count
-const COUNTER_CONTEXT = "vibes:stats:context";  // hash: context -> count
-const COUNTER_DAY = "vibes:stats:day";  // hash: YYYY-MM-DD -> count
+let client: SupabaseClient | null = null;
+function getClient(): SupabaseClient | null {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return null;
+  if (!client) {
+    client = createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+  }
+  return client;
+}
 
 export interface StoredEvent {
   type: "button_click" | "widget_click";
@@ -28,29 +39,19 @@ export interface StoredEvent {
 }
 
 export async function recordEvent(event: StoredEvent): Promise<void> {
-  if (!kv) return;
+  const sb = getClient();
+  if (!sb) return;
   try {
-    // 1. Append to recent list (capped)
-    await kv.lpush(RECENT_KEY, JSON.stringify(event));
-    await kv.ltrim(RECENT_KEY, 0, RECENT_MAX - 1);
-
-    // 2. Increment counters
-    await kv.incr(COUNTER_TOTAL);
-    await kv.hincrby(COUNTER_TYPE, event.type, 1);
-    if (event.channel) {
-      await kv.hincrby(COUNTER_CHANNEL, event.channel, 1);
-    }
-    if (event.context) {
-      await kv.hincrby(COUNTER_CONTEXT, event.context, 1);
-    }
-    // Day bucket from time string "07.10.2026, 06:54"
-    const m = event.time.match(/(\d{2})\.(\d{2})\.(\d{4})/);
-    if (m) {
-      const day = `${m[3]}-${m[2]}-${m[1]}`;
-      await kv.hincrby(COUNTER_DAY, day, 1);
-    }
+    const { error } = await sb.from("conversion_events").insert({
+      type: event.type,
+      channel: event.channel ?? null,
+      context: event.context ?? null,
+      device: event.device ?? null,
+      client_time: event.time,
+    });
+    if (error) console.warn("[supabase] insert failed", error.message);
   } catch (e) {
-    console.warn("[kv] recordEvent failed", e);
+    console.warn("[supabase] recordEvent error", e);
   }
 }
 
@@ -61,11 +62,22 @@ export interface Stats {
   byContext: Record<string, number>;
   byDay: Record<string, number>;
   recent: StoredEvent[];
-  kvConfigured: boolean;
+  kvConfigured: boolean; // kept for backwards compat with the UI; means "supabase configured"
+}
+
+interface DbRow {
+  id: number;
+  type: string;
+  channel: string | null;
+  context: string | null;
+  device: string | null;
+  client_time: string;
+  created_at: string;
 }
 
 export async function getStats(): Promise<Stats> {
-  if (!kv) {
+  const sb = getClient();
+  if (!sb) {
     return {
       total: 0,
       byType: {},
@@ -76,36 +88,67 @@ export async function getStats(): Promise<Stats> {
       kvConfigured: false,
     };
   }
-  try {
-    const [total, byType, byChannel, byContext, byDay, recentRaw] = await Promise.all([
-      kv.get<number>(COUNTER_TOTAL),
-      kv.hgetall<Record<string, number>>(COUNTER_TYPE),
-      kv.hgetall<Record<string, number>>(COUNTER_CHANNEL),
-      kv.hgetall<Record<string, number>>(COUNTER_CONTEXT),
-      kv.hgetall<Record<string, number>>(COUNTER_DAY),
-      kv.lrange<string>(RECENT_KEY, 0, RECENT_MAX - 1),
-    ]);
 
-    const recent: StoredEvent[] = [];
-    for (const item of recentRaw ?? []) {
-      try {
-        recent.push(JSON.parse(item));
-      } catch {
-        // skip corrupt entries
+  try {
+    // Run all aggregations in parallel.
+    const [totalRes, typeRes, channelRes, contextRes, dayRes, recentRes] =
+      await Promise.all([
+        sb.from("conversion_events").select("*", { count: "exact", head: true }),
+        sb.from("conversion_events").select("type"),
+        sb.from("conversion_events").select("channel"),
+        sb.from("conversion_events").select("context"),
+        sb.from("conversion_events").select("created_at"),
+        sb
+          .from("conversion_events")
+          .select("*")
+          .order("id", { ascending: false })
+          .limit(30),
+      ]);
+
+    const countRows = <T extends { [k: string]: any }>(
+      rows: T[] | null,
+      key: keyof T
+    ): Record<string, number> => {
+      const out: Record<string, number> = {};
+      for (const r of rows ?? []) {
+        const v = r[key];
+        if (!v) continue;
+        out[v] = (out[v] ?? 0) + 1;
       }
+      return out;
+    };
+
+    const byType = countRows(typeRes.data ?? [], "type");
+    const byChannel = countRows(channelRes.data ?? [], "channel");
+    const byContext = countRows(contextRes.data ?? [], "context");
+
+    // Build "byDay" — parse day from created_at (ISO timestamp).
+    const byDay: Record<string, number> = {};
+    for (const r of (dayRes.data as { created_at?: string }[]) ?? []) {
+      if (!r.created_at) continue;
+      const day = r.created_at.slice(0, 10); // YYYY-MM-DD
+      byDay[day] = (byDay[day] ?? 0) + 1;
     }
 
+    const recent: StoredEvent[] = ((recentRes.data as DbRow[]) ?? []).map((r) => ({
+      type: r.type as "button_click" | "widget_click",
+      channel: r.channel ?? undefined,
+      context: r.context ?? undefined,
+      device: r.device ?? undefined,
+      time: r.client_time,
+    }));
+
     return {
-      total: total ?? 0,
-      byType: byType ?? {},
-      byChannel: byChannel ?? {},
-      byContext: byContext ?? {},
-      byDay: byDay ?? {},
+      total: totalRes.count ?? 0,
+      byType,
+      byChannel,
+      byContext,
+      byDay,
       recent,
       kvConfigured: true,
     };
   } catch (e) {
-    console.warn("[kv] getStats failed", e);
+    console.warn("[supabase] getStats error", e);
     return {
       total: 0,
       byType: {},

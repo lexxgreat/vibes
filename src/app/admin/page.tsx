@@ -217,30 +217,43 @@ export default function AdminPage() {
 
           <div className="rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-6">
             <h2 className="font-display text-xl uppercase text-yellow-300">
-              ⚠️ Хранилище не подключено
+              ⚠️ Supabase не подключён
             </h2>
             <p className="mt-2 text-sm text-white/80">
               Чтобы видеть статистику на этой странице, нужно подключить
-              Vercel KV (бесплатный Redis-совместимый storage, 30k
-              запросов/мес). Без него уведомления в Telegram приходят, но
-              дашборд не работает.
+              бесплатную базу данных Supabase. Без неё уведомления в
+              Telegram приходят, но дашборд не работает.
             </p>
             <ol className="mt-4 space-y-2 text-sm text-white/80 list-decimal pl-5">
               <li>
-                Открой{" "}
+                Зайди на{" "}
                 <a
                   className="text-[#e91e8c] underline"
-                  href="https://vercel.com/alexs-projects-780857c1/vibes/integrations"
+                  href="https://supabase.com/dashboard"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Vercel → vibes → Storage
-                </a>
+                  supabase.com/dashboard
+                </a>{" "}
+                → New Project (бесплатно)
               </li>
-              <li>Нажми «Create Database» → выбери KV</li>
-              <li>Назови <code className="bg-black/40 px-1 rounded">vibes-kv</code>, регион iad1</li>
-              <li>Нажми «Connect Project» — Vercel сам добавит env-переменные</li>
-              <li>Вернись сюда и обнови страницу</li>
+              <li>Назови проект <code className="bg-black/40 px-1 rounded">vibes</code>, регион Frankfurt</li>
+              <li>В Supabase открой <b>SQL Editor</b> → вставь содержимое файла <code className="bg-black/40 px-1 rounded">supabase-schema.sql</code> из репо → <b>Run</b></li>
+              <li>Открой <b>Settings → API</b>, скопируй:
+                <ul className="mt-1 ml-4 list-disc">
+                  <li><b>Project URL</b></li>
+                  <li><b>service_role</b> secret key (НЕ anon!)</li>
+                </ul>
+              </li>
+              <li>В Vercel: <b>Settings → Environment Variables</b>, добавь:
+                <ul className="mt-1 ml-4 list-disc">
+                  <li><code className="bg-black/40 px-1 rounded">NEXT_PUBLIC_SUPABASE_URL</code> = Project URL</li>
+                  <li><code className="bg-black/40 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> = service_role key</li>
+                  <li><code className="bg-black/40 px-1 rounded">ADMIN_TOKEN</code> = любой сложный пароль</li>
+                </ul>
+              </li>
+              <li>Vercel → <b>Deployments</b> → Redeploy (без build cache)</li>
+              <li>Открой <code className="bg-black/40 px-1 rounded">/admin?token=твой_пароль</code></li>
             </ol>
           </div>
         </div>
