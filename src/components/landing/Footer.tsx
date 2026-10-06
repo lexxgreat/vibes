@@ -2,7 +2,7 @@
 
 import { STUDIO } from "@/lib/contacts";
 import { trackButtonClick } from "@/lib/analytics";
-import { VkIcon, WhatsappIcon, TelegramIcon, PhoneIcon, MapPinIcon } from "./icons";
+import { VkIcon, TelegramIcon, PhoneIcon, MapPinIcon } from "./icons";
 
 /**
  * Sticky footer — pinned to bottom of the page.
@@ -77,17 +77,6 @@ export function Footer() {
             >
               <VkIcon className="h-5 w-5" />
               ВКонтакте
-            </a>
-            <a
-              href={`https://wa.me/${STUDIO.whatsappNumber}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-track="button"
-              onClick={() => trackChannel("whatsapp")}
-              className="group inline-flex items-center gap-3 text-sm text-white/70 transition-colors hover:text-[#e91e8c]"
-            >
-              <WhatsappIcon className="h-5 w-5" />
-              WhatsApp
             </a>
             <a
               href={STUDIO.telegramUrl}

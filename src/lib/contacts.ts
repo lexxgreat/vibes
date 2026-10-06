@@ -24,11 +24,11 @@ export const STUDIO = {
 };
 
 export type ContactChannel = {
-  id: "vk" | "whatsapp" | "telegram" | "phone";
+  id: "vk" | "telegram" | "phone";
   label: string;
   description: string;
   href: string;
-  icon: "vk" | "whatsapp" | "telegram" | "phone";
+  icon: "vk" | "telegram" | "phone";
 };
 
 /**
@@ -47,18 +47,6 @@ export const getChannels = (ref: "button" | "vid"): ContactChannel[] => [
     description: "Написать в сообщения группы",
     href: withRef("https://vk.me/vbsdanceperm", ref),
     icon: "vk",
-  },
-  {
-    id: "whatsapp",
-    label: "WhatsApp",
-    description: STUDIO.phoneDisplay,
-    href: withRef(
-      `https://wa.me/${STUDIO.whatsappNumber}?text=${encodeURIComponent(
-        "Здравствуйте! Хочу записаться на день открытых дверей VIBES 10–11 октября 🙌"
-      )}`,
-      ref
-    ),
-    icon: "whatsapp",
   },
   {
     id: "telegram",

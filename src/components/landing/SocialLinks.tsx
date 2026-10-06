@@ -2,7 +2,7 @@
 
 import { STUDIO } from "@/lib/contacts";
 import { trackButtonClick } from "@/lib/analytics";
-import { VkIcon, WhatsappIcon, TelegramIcon } from "./icons";
+import { VkIcon, TelegramIcon } from "./icons";
 
 interface SocialLinksProps {
   /** Optional context label for analytics (e.g. "hero", "footer"). */
@@ -31,13 +31,6 @@ export function SocialLinks({
       href: STUDIO.vkGroupUrl,
       icon: <VkIcon className={compact ? "h-4 w-4" : "h-5 w-5"} />,
       hoverBorder: "hover:border-[#0077FF]/60",
-    },
-    {
-      id: "whatsapp",
-      label: "WhatsApp",
-      href: `https://wa.me/${STUDIO.whatsappNumber}`,
-      icon: <WhatsappIcon className={compact ? "h-4 w-4" : "h-5 w-5"} />,
-      hoverBorder: "hover:border-[#25D366]/60",
     },
     {
       id: "telegram",
