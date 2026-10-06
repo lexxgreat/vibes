@@ -67,6 +67,9 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [from, setFrom] = useState<string>("");
+  const [to, setTo] = useState<string>("");
+  const [resetting, setResetting] = useState(false);
 
   useEffect(() => {
     // Read token from URL query (?token=...) OR localStorage (set on login form).
@@ -90,7 +93,11 @@ export default function AdminPage() {
     setLoading(true);
     setError(null);
     try {
-      const url = `/api/stats${token ? `?token=${encodeURIComponent(token)}` : ""}`;
+      const params = new URLSearchParams();
+      if (token) params.set("token", token);
+      if (from) params.set("from", from);
+      if (to) params.set("to", to);
+      const url = `/api/stats${params.toString() ? `?${params.toString()}` : ""}`;
       const res = await fetch(url);
       const data = await res.json();
       if (!res.ok || !data.ok) {
@@ -103,7 +110,33 @@ export default function AdminPage() {
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [token, from, to]);
+
+  const handleReset = async () => {
+    if (!token) return;
+    const confirmed = window.confirm(
+      "Удалить ВСЮ статистику конверсий? Это действие необратимо."
+    );
+    if (!confirmed) return;
+    setResetting(true);
+    try {
+      const params = new URLSearchParams();
+      if (token) params.set("token", token);
+      const res = await fetch(`/api/stats?${params.toString()}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        alert(`Ошибка: ${data.error ?? res.status}`);
+      } else {
+        await fetchStats();
+      }
+    } catch (e) {
+      alert(`Ошибка: ${(e as Error).message}`);
+    } finally {
+      setResetting(false);
+    }
+  };
 
   useEffect(() => {
     fetchStats();
@@ -263,7 +296,7 @@ CREATE POLICY "anon can select" ON public.conversion_events FOR SELECT TO anon U
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
         {/* Header */}
-        <header className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6 mb-8">
+        <header className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6 mb-6">
           <div>
             <h1 className="font-display text-4xl uppercase sm:text-5xl">
               VIBES — аналитика
@@ -276,13 +309,87 @@ CREATE POLICY "anon can select" ON public.conversion_events FOR SELECT TO anon U
               })}
             </p>
           </div>
-          <button
-            onClick={fetchStats}
-            className="rounded-full border border-white/20 px-5 py-2.5 font-display text-sm uppercase tracking-wide hover:border-[#e91e8c]/60 hover:text-[#e91e8c]"
-          >
-            ↻ Обновить
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handleReset}
+              disabled={resetting}
+              className="rounded-full border border-red-500/30 px-4 py-2 font-display text-xs uppercase tracking-wide text-red-300 hover:border-red-500/60 hover:text-red-200 disabled:opacity-50"
+              title="Удалить ВСЮ статистику"
+            >
+              {resetting ? "Очистка..." : "✕ Сбросить"}
+            </button>
+            <button
+              onClick={fetchStats}
+              className="rounded-full border border-white/20 px-5 py-2.5 font-display text-sm uppercase tracking-wide hover:border-[#e91e8c]/60 hover:text-[#e91e8c]"
+            >
+              ↻ Обновить
+            </button>
+          </div>
         </header>
+
+        {/* Date range filter */}
+        <div className="mb-6 flex flex-wrap items-end gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <label className="flex flex-col gap-1">
+            <span className="font-display text-[10px] uppercase tracking-[0.2em] text-white/50">
+              С даты
+            </span>
+            <input
+              type="date"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+              className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#e91e8c] [color-scheme:dark]"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            <span className="font-display text-[10px] uppercase tracking-[0.2em] text-white/50">
+              По дату
+            </span>
+            <input
+              type="date"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-[#e91e8c] [color-scheme:dark]"
+            />
+          </label>
+          <button
+            onClick={() => { setFrom(""); setTo(""); }}
+            className="h-[38px] rounded-lg border border-white/15 px-3 font-display text-xs uppercase tracking-wide text-white/70 hover:border-[#e91e8c]/60 hover:text-white"
+            title="Сбросить фильтр дат"
+          >
+            Всё время
+          </button>
+          <div className="ml-auto flex gap-2">
+            <button
+              onClick={() => {
+                const d = new Date();
+                setTo(d.toISOString().slice(0, 10));
+                d.setDate(d.getDate() - 6);
+                setFrom(d.toISOString().slice(0, 10));
+              }}
+              className="h-[38px] rounded-lg border border-white/15 px-3 font-display text-xs uppercase tracking-wide text-white/70 hover:border-[#e91e8c]/60 hover:text-white"
+            >
+              7 дней
+            </button>
+            <button
+              onClick={() => {
+                const d = new Date();
+                setTo(d.toISOString().slice(0, 10));
+                d.setDate(d.getDate() - 29);
+                setFrom(d.toISOString().slice(0, 10));
+              }}
+              className="h-[38px] rounded-lg border border-white/15 px-3 font-display text-xs uppercase tracking-wide text-white/70 hover:border-[#e91e8c]/60 hover:text-white"
+            >
+              30 дней
+            </button>
+          </div>
+        </div>
+
+        {(from || to) && (
+          <p className="mb-4 text-xs text-white/50">
+            Фильтр:{" "}
+            {from || "всё время"} — {to || "сегодня"}
+          </p>
+        )}
 
         {/* Top stats */}
         <div className="grid gap-4 sm:grid-cols-3 mb-8">

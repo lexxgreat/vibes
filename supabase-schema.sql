@@ -54,3 +54,11 @@ CREATE POLICY "anon can select"
   ON public.conversion_events
   FOR SELECT TO anon
   USING (true);
+
+-- 6. Allow anon (publishable key) to delete rows -----------------------------
+-- Used by the admin dashboard "Reset stats" button.
+DROP POLICY IF EXISTS "anon can delete" ON public.conversion_events;
+CREATE POLICY "anon can delete"
+  ON public.conversion_events
+  FOR DELETE TO anon
+  USING (true);

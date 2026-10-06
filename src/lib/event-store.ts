@@ -34,6 +34,18 @@ function getClient(): SupabaseClient | null {
   return client;
 }
 
+export async function deleteAllEvents(): Promise<{ ok: boolean; error?: string }> {
+  const sb = getClient();
+  if (!sb) return { ok: false, error: "Supabase not configured" };
+  try {
+    const { error } = await sb.from("conversion_events").delete().neq("id", 0);
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+
 export interface StoredEvent {
   type: "button_click" | "widget_click";
   channel?: string;
@@ -79,7 +91,12 @@ interface DbRow {
   created_at: string;
 }
 
-export async function getStats(): Promise<Stats> {
+export async function getStats(opts?: {
+  /** Inclusive start date (YYYY-MM-DD, server time UTC). */
+  from?: string;
+  /** Inclusive end date (YYYY-MM-DD, server time UTC). */
+  to?: string;
+}): Promise<Stats> {
   const sb = getClient();
   if (!sb) {
     return {
@@ -93,20 +110,50 @@ export async function getStats(): Promise<Stats> {
     };
   }
 
+  // Build date filter — gte = start of `from` day, lt = day after `to`.
+  let dateFilter: string | null = null;
+  if (opts?.from) {
+    dateFilter = `${opts.from}T00:00:00Z`;
+  } else if (opts?.to) {
+    // If only `to` provided, default `from` to 30 days before `to`.
+    const toDate = new Date(opts.to + "T00:00:00Z");
+    toDate.setDate(toDate.getDate() - 29);
+    dateFilter = toDate.toISOString();
+  }
+
+  let toFilter: string | null = null;
+  if (opts?.to) {
+    // End of day: next day 00:00 UTC (so `lt` covers the entire `to` day).
+    const toDate = new Date(opts.to + "T00:00:00Z");
+    toDate.setDate(toDate.getDate() + 1);
+    toFilter = toDate.toISOString();
+  }
+
+  const applyFilters = <T extends Record<string, any>>(
+    query: import("@supabase/postgrest-js").PostgrestFilterBuilder<T, any, any>
+  ) => {
+    if (dateFilter) query = query.gte("created_at", dateFilter);
+    if (toFilter) query = query.lt("created_at", toFilter);
+    return query;
+  };
+
   try {
-    // Run all aggregations in parallel.
     const [totalRes, typeRes, channelRes, contextRes, dayRes, recentRes] =
       await Promise.all([
-        sb.from("conversion_events").select("*", { count: "exact", head: true }),
-        sb.from("conversion_events").select("type"),
-        sb.from("conversion_events").select("channel"),
-        sb.from("conversion_events").select("context"),
-        sb.from("conversion_events").select("created_at"),
-        sb
-          .from("conversion_events")
-          .select("*")
-          .order("id", { ascending: false })
-          .limit(30),
+        applyFilters(
+          sb.from("conversion_events").select("*", { count: "exact", head: true })
+        ),
+        applyFilters(sb.from("conversion_events").select("type")),
+        applyFilters(sb.from("conversion_events").select("channel")),
+        applyFilters(sb.from("conversion_events").select("context")),
+        applyFilters(sb.from("conversion_events").select("created_at")),
+        applyFilters(
+          sb
+            .from("conversion_events")
+            .select("*")
+            .order("id", { ascending: false })
+            .limit(30)
+        ),
       ]);
 
     const countRows = <T extends { [k: string]: any }>(
