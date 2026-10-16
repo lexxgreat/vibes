@@ -1,7 +1,7 @@
 import { STUDIO } from "@/lib/contacts";
 import { ContactButton } from "./ContactButton";
 import { SocialLinks } from "./SocialLinks";
-import { SparkleIcon, CalendarIcon, MapPinIcon, ClockIcon } from "./icons";
+import { SparkleIcon, MapPinIcon, ClockIcon } from "./icons";
 
 const DIRECTIONS = [
   "Hip hop",
@@ -16,8 +16,8 @@ const DIRECTIONS = [
  * Hero — full-viewport background image (the studio's VK cover).
  *
  * Layout:
- * - Desktop: 2-column grid. Left = headline + facts + CTA + promo.
- *   Right = a glass card listing the 6 dance directions (fills the empty area).
+ * - Desktop: 2-column grid. Left = headline + offer + CTA + social.
+ *   Right = a glass card listing the 6 dance directions.
  * - Mobile: single column, reduced top padding so CTA fits in the first viewport.
  */
 export function Hero() {
@@ -47,24 +47,24 @@ export function Hero() {
         <div className="grid items-center gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-12">
           {/* ── LEFT: copy + CTA ─────────────────────────────────── */}
           <div className="max-w-2xl">
-            {/* Date badge */}
+            {/* Offer badge */}
             <div className="fade-up mb-4 inline-flex items-center gap-2 rounded-full border border-[#e91e8c]/40 bg-black/40 px-3.5 py-1.5 backdrop-blur-sm sm:mb-5">
-              <CalendarIcon className="h-3 w-3 text-[#e91e8c] sm:h-3.5 sm:w-3.5" />
+              <SparkleIcon className="h-3 w-3 text-[#e91e8c] sm:h-3.5 sm:w-3.5" />
               <span className="font-display text-[11px] uppercase tracking-[0.2em] text-white sm:text-xs">
-                {STUDIO.dodDate}
+                {STUDIO.offer}
               </span>
             </div>
 
             {/* Big headline */}
             <h1
-              className="fade-up font-display text-4xl leading-[0.88] uppercase tracking-wide text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)] xs:text-5xl sm:text-6xl lg:text-7xl"
+              className="fade-up font-display text-5xl leading-[0.88] uppercase tracking-wide text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.85)] sm:text-6xl lg:text-7xl"
               style={{ animationDelay: "0.1s" }}
             >
-              День
+              Твой танец.
               <br />
-              открытых
+              Твоя команда.
               <br />
-              <span className="text-[#e91e8c]">дверей</span>
+              <span className="text-[#e91e8c]">Твои vibes.</span>
             </h1>
 
             {/* Studio subline */}
@@ -85,54 +85,63 @@ export function Hero() {
 
             {/* Key facts */}
             <div
-              className="fade-up mt-4 grid max-w-md grid-cols-3 gap-2 border-y border-white/15 py-3 backdrop-blur-[2px] sm:mt-6 sm:gap-4 sm:py-5"
+              className="fade-up mt-5 grid max-w-md grid-cols-3 gap-3 border-y border-white/15 py-4 backdrop-blur-[2px] sm:mt-6 sm:gap-4 sm:py-5"
               style={{ animationDelay: "0.3s" }}
             >
               <div>
-                <div className="font-display text-xl text-[#e91e8c] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-3xl lg:text-4xl">
-                  15
-                </div>
-                <div className="mt-0.5 font-display text-[9px] uppercase tracking-[0.12em] text-white/70 sm:text-[10px] sm:tracking-[0.18em]">
-                  часов танцев
-                </div>
-              </div>
-              <div>
-                <div className="font-display text-xl text-[#e91e8c] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-3xl lg:text-4xl">
-                  590₽
-                </div>
-                <div className="mt-0.5 font-display text-[9px] uppercase tracking-[0.12em] text-white/70 sm:text-[10px] sm:tracking-[0.18em]">
-                  за весь день
-                </div>
-              </div>
-              <div>
-                <div className="font-display text-xl text-[#e91e8c] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-3xl lg:text-4xl">
+                <div className="font-display text-2xl text-[#e91e8c] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-3xl lg:text-4xl">
                   6
                 </div>
                 <div className="mt-0.5 font-display text-[9px] uppercase tracking-[0.12em] text-white/70 sm:text-[10px] sm:tracking-[0.18em]">
                   направлений
                 </div>
               </div>
+              <div>
+                <div className="font-display text-2xl text-[#e91e8c] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-3xl lg:text-4xl">
+                  0₽
+                </div>
+                <div className="mt-0.5 font-display text-[9px] uppercase tracking-[0.12em] text-white/70 sm:text-[10px] sm:tracking-[0.18em]">
+                  первое занятие
+                </div>
+              </div>
+              <div>
+                <div className="font-display text-2xl text-[#e91e8c] drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-3xl lg:text-4xl">
+                  4+
+                </div>
+                <div className="mt-0.5 font-display text-[9px] uppercase tracking-[0.12em] text-white/70 sm:text-[10px] sm:tracking-[0.18em]">
+                  года в Перми
+                </div>
+              </div>
             </div>
+
+            {/* Short pitch */}
+            <p
+              className="fade-up mt-5 max-w-lg text-base leading-relaxed text-white/85 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] sm:mt-6"
+              style={{ animationDelay: "0.35s" }}
+            >
+              {STUDIO.offerDescription} Подберём направление и группу под твой
+              уровень — для взрослых и детей.
+            </p>
 
             {/* CTAs */}
             <div
-              className="fade-up mt-4 flex flex-wrap items-center gap-2 sm:mt-6 sm:gap-3"
+              className="fade-up mt-5 flex flex-wrap items-center gap-2 sm:mt-6 sm:gap-3"
               style={{ animationDelay: "0.4s" }}
             >
-              <ContactButton size="lg" context="hero" modalTitle="Записаться на день открытых дверей">
-                Записаться
+              <ContactButton size="lg" context="hero" modalTitle="Записаться на бесплатное пробное занятие">
+                Записаться на пробное
               </ContactButton>
               <a
-                href="#schedule"
+                href="#styles"
                 className="
                   inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/30
-                  px-4 py-3 font-display text-[11px] uppercase tracking-[0.15em] text-white/85
+                  px-5 py-3.5 font-display text-xs uppercase tracking-[0.15em] text-white/85
                   backdrop-blur-sm transition-colors hover:border-[#e91e8c]/50 hover:text-white
                   sm:px-6 sm:py-4 sm:text-sm
                 "
               >
                 <ClockIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                Программа
+                Направления
               </a>
             </div>
 
@@ -145,19 +154,6 @@ export function Hero() {
                 Напиши нам:
               </span>
               <SocialLinks context="hero" compact />
-            </div>
-
-            {/* Promo chip */}
-            <div
-              className="fade-up mt-3 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.18em] text-white/70 drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)] sm:mt-5 sm:text-xs"
-              style={{ animationDelay: "0.5s" }}
-            >
-              <SparkleIcon className="h-3 w-3 text-[#e91e8c] sm:h-3.5 sm:w-3.5" />
-              Промокод
-              <span className="rounded border border-[#e91e8c]/60 bg-black/30 px-2 py-0.5 font-display tracking-[0.25em] text-[#e91e8c]">
-                {STUDIO.promoCode}
-              </span>
-              — 2 занятия бесплатно
             </div>
           </div>
 

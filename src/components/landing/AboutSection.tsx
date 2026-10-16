@@ -70,21 +70,22 @@ export function AboutSection() {
               </div>
             </div>
             <div>
-              <div className="font-display text-3xl text-[#e91e8c]">15+</div>
+              <div className="font-display text-3xl text-[#e91e8c]">0₽</div>
               <div className="mt-1 font-display text-[11px] uppercase tracking-[0.2em] text-white/50">
-                часов на ДОД
+                первое занятие
               </div>
             </div>
             <div>
-              <div className="font-display text-3xl text-[#e91e8c]">590₽</div>
+              <div className="font-display text-3xl text-[#e91e8c]">2</div>
               <div className="mt-1 font-display text-[11px] uppercase tracking-[0.2em] text-white/50">
-                за весь день
+                группы: взрослые
+                <br />и дети
               </div>
             </div>
           </div>
 
           <div className="mt-8">
-            <ContactButton size="md" context="about" modalTitle="Записаться на пробное">
+            <ContactButton size="md" context="about" modalTitle="Записаться на бесплатное пробное занятие">
               Хочу на пробное
             </ContactButton>
           </div>

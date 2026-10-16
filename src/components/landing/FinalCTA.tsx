@@ -1,10 +1,11 @@
 import { STUDIO } from "@/lib/contacts";
 import { ContactButton } from "./ContactButton";
 import { SocialLinks } from "./SocialLinks";
-import { CalendarIcon, SparkleIcon, MapPinIcon } from "./icons";
+import { SparkleIcon, MapPinIcon } from "./icons";
 
 /**
  * Final CTA — big, loud, conversion-focused.
+ * Single offer: free trial lesson.
  */
 export function FinalCTA() {
   return (
@@ -17,7 +18,6 @@ export function FinalCTA() {
     >
       {/* Background image */}
       <div className="absolute inset-0 -z-10 opacity-30">
-        { }
         <img
           src="/images/dod-announce.jpg"
           alt=""
@@ -35,20 +35,20 @@ export function FinalCTA() {
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#e91e8c]/40 bg-[#e91e8c]/10 px-4 py-1.5">
           <SparkleIcon className="h-3.5 w-3.5 text-[#e91e8c]" />
           <span className="font-display text-xs uppercase tracking-[0.25em] text-white">
-            {STUDIO.dodDate} · {STUDIO.city}
+            {STUDIO.offer}
           </span>
         </div>
 
         <h2 className="font-display text-5xl uppercase leading-[0.9] tracking-wide text-white sm:text-7xl">
-          Твой выход.
+          Запишись
           <br />
-          <span className="text-[#e91e8c]">10–11 октября</span>
+          <span className="text-[#e91e8c]">на пробное</span>
         </h2>
 
         <p className="mx-auto mt-6 max-w-xl text-base text-white/75 sm:text-lg">
-          {STUDIO.dodHours} за <span className="font-semibold text-white">{STUDIO.dodPrice}</span>.
-          Промокод <span className="font-display tracking-[0.2em] text-[#e91e8c]">«{STUDIO.promoCode}»</span> —
-          ещё 2 занятия бесплатно. Запишись через любой удобный мессенджер.
+          Приходи на одно занятие бесплатно — попробуй направление и
+          познакомься с командой. Подберём группу под твой уровень:
+          для взрослых и детей.
         </p>
 
         {/* Address line */}
@@ -65,11 +65,11 @@ export function FinalCTA() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-4">
-          <ContactButton size="lg" context="finalcta" modalTitle="Записаться на день открытых дверей">
-            Записаться на день открытых дверей
+          <ContactButton size="lg" context="finalcta" modalTitle="Записаться на бесплатное пробное занятие">
+            Записаться на пробное
           </ContactButton>
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/45">
-            <CalendarIcon className="h-3.5 w-3.5" />
+            <SparkleIcon className="h-3.5 w-3.5" />
             Ответим в течение нескольких минут
           </div>
 

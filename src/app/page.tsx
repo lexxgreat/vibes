@@ -2,8 +2,6 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { AboutSection } from "@/components/landing/AboutSection";
 import { DanceStyles } from "@/components/landing/DanceStyles";
-import { Schedule } from "@/components/landing/Schedule";
-import { Promo } from "@/components/landing/Promo";
 import { FinalCTA } from "@/components/landing/FinalCTA";
 import { Footer } from "@/components/landing/Footer";
 import { FloatingWidget } from "@/components/landing/FloatingWidget";
@@ -18,8 +16,6 @@ export default function Home() {
         <Hero />
         <AboutSection />
         <DanceStyles />
-        <Schedule />
-        <Promo />
         <FinalCTA />
       </main>
 

@@ -6,6 +6,7 @@
 export const STUDIO = {
   name: "VIBES",
   fullName: "VIBES Dance",
+  tagline: "Больше, чем просто танцы",
   city: "Пермь",
   address: "Седова, 22",
   addressFull: "г. Пермь, ул. Седова, 22",
@@ -13,10 +14,9 @@ export const STUDIO = {
   vkGroupUrl: "https://vk.ru/vbsdanceperm",
   telegramHandle: "vibesmnd",
   telegramUrl: "https://t.me/vibesmnd",
-  dodDate: "10–11 октября",
-  dodPrice: "590 ₽",
-  dodHours: "15 часов танцев",
-  promoCode: "ТАНЦЫ",
+  offer: "Бесплатное пробное занятие",
+  offerDescription:
+    "Приходи на одно занятие бесплатно — попробуй направление и познакомься с командой. Без обязательств.",
   phoneDisplay: "+7 (912) 487-01-70",
   phoneRaw: "+79124870170",
   phoneTel: "+79124870170",
@@ -33,7 +33,7 @@ export type ContactChannel = {
 
 /**
  * Build a tracked URL — appends `?ref=<source>` so the studio can see
- * in VK/WhatsApp which link the lead clicked.
+ * in VK/Telegram which link the lead clicked.
  */
 function withRef(baseUrl: string, ref: "button" | "vid"): string {
   const sep = baseUrl.includes("?") ? "&" : "?";

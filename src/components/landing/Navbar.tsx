@@ -9,8 +9,7 @@ import { PhoneIcon, MapPinIcon } from "./icons";
 const NAV_LINKS = [
   { href: "#about", label: "Студия" },
   { href: "#styles", label: "Направления" },
-  { href: "#schedule", label: "Программа" },
-  { href: "#promo", label: "Акции" },
+  { href: "#join", label: "Записаться" },
 ];
 
 /**
@@ -105,7 +104,7 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden shrink-0 md:block">
-          <ContactButton size="sm" context="navbar" modalTitle="Записаться на день открытых дверей">
+          <ContactButton size="sm" context="navbar" modalTitle="Записаться на бесплатное пробное занятие">
             Записаться
           </ContactButton>
         </div>

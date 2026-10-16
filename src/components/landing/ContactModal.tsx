@@ -30,7 +30,7 @@ export function ContactModal({
   open,
   onOpenChange,
   source,
-  title = "Записаться на день открытых дверей",
+  title = "Записаться на бесплатное пробное",
 }: ContactModalProps) {
   const channels = getChannels(source);
 
@@ -76,7 +76,7 @@ export function ContactModal({
               {title}
             </DialogTitle>
             <DialogDescription className="text-sm text-white/60">
-              10–11 октября · {STUDIO.dodPrice} · {STUDIO.dodHours}.<br />
+              {STUDIO.offer}.<br />
               Выбери удобный способ — отвечаем быстро.
             </DialogDescription>
           </DialogHeader>
@@ -125,7 +125,7 @@ export function ContactModal({
         </div>
 
         <div className="border-t border-white/5 px-6 py-4 text-center text-[11px] uppercase tracking-[0.18em] text-white/40">
-          Промокод «{STUDIO.promoCode}» — 2 занятия бесплатно
+          Первое занятие — бесплатно
         </div>
       </DialogContent>
     </Dialog>

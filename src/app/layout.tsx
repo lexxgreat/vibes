@@ -28,15 +28,15 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vibes-perm.vercel.app"),
-  title: "VIBES Dance — Школа танцев в Перми | Дни открытых дверей 10–11 октября",
+  title: "VIBES Dance — Школа танцев в Перми | Бесплатное пробное занятие",
   description:
-    "Школа танцев VIBES в Перми. Дни открытых дверей 10–11 октября: 15 часов танцев за 590₽. Hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Группы для взрослых и детей. Запишись через ВК, WhatsApp или по телефону.",
+    "Школа танцев VIBES в Перми. Hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Группы для взрослых и детей. Первое занятие — бесплатно. Запишись через ВК, Telegram или по телефону.",
   keywords: [
     "танцы Пермь",
     "школа танцев",
     "VIBES",
     "vibes dance",
-    "день открытых дверей",
+    "бесплатное пробное занятие",
     "hip hop Пермь",
     "high heels",
     "choreo",
@@ -44,21 +44,22 @@ export const metadata: Metadata = {
     "contemporary",
     "танцы для взрослых",
     "танцы для детей",
+    "танцевальная студия Пермь",
   ],
   authors: [{ name: "VIBES Dance" }],
   openGraph: {
-    title: "VIBES Dance — Дни открытых дверей 10–11 октября",
+    title: "VIBES Dance — Школа танцев в Перми",
     description:
-      "15 часов танцев за 590₽. Hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Пермь.",
+      "6 направлений: hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Первое занятие бесплатно.",
     type: "website",
     locale: "ru_RU",
     images: ["/images/cover-vk.jpg"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "VIBES Dance — Дни открытых дверей 10–11 октября",
+    title: "VIBES Dance — Школа танцев в Перми",
     description:
-      "15 часов танцев за 590₽. Hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Пермь.",
+      "6 направлений: hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Первое занятие бесплатно.",
   },
 };
 
