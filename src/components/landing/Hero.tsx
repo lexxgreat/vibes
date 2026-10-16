@@ -101,7 +101,7 @@ export function Hero() {
                   0₽
                 </div>
                 <div className="mt-0.5 font-display text-[9px] uppercase tracking-[0.12em] text-white/70 sm:text-[10px] sm:tracking-[0.18em]">
-                  первое занятие
+                  пробное занятие
                 </div>
               </div>
               <div>
@@ -128,7 +128,7 @@ export function Hero() {
               className="fade-up mt-5 flex flex-wrap items-center gap-2 sm:mt-6 sm:gap-3"
               style={{ animationDelay: "0.4s" }}
             >
-              <ContactButton size="lg" context="hero" modalTitle="Записаться на бесплатное пробное занятие">
+              <ContactButton size="lg" context="hero" modalTitle="Записаться на пробное занятие">
                 Записаться на пробное
               </ContactButton>
               <a

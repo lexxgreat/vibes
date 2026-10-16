@@ -30,7 +30,7 @@ export function ContactModal({
   open,
   onOpenChange,
   source,
-  title = "Записаться на бесплатное пробное",
+  title = "Записаться на пробное",
 }: ContactModalProps) {
   const channels = getChannels(source);
 
@@ -125,7 +125,7 @@ export function ContactModal({
         </div>
 
         <div className="border-t border-white/5 px-6 py-4 text-center text-[11px] uppercase tracking-[0.18em] text-white/40">
-          Первое занятие — бесплатно
+          Пробное занятие — бесплатно
         </div>
       </DialogContent>
     </Dialog>

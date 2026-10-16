@@ -104,7 +104,7 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden shrink-0 md:block">
-          <ContactButton size="sm" context="navbar" modalTitle="Записаться на бесплатное пробное занятие">
+          <ContactButton size="sm" context="navbar" modalTitle="Записаться на пробное занятие">
             Записаться
           </ContactButton>
         </div>

@@ -28,15 +28,15 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vibes-perm.vercel.app"),
-  title: "VIBES Dance — Школа танцев в Перми | Бесплатное пробное занятие",
+  title: "VIBES Dance — Школа танцев в Перми | Запись на пробное занятие",
   description:
-    "Школа танцев VIBES в Перми. Hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Группы для взрослых и детей. Первое занятие — бесплатно. Запишись через ВК, Telegram или по телефону.",
+    "Школа танцев VIBES в Перми. Hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Группы для взрослых и детей. Приходи на пробное занятие — это бесплатно. Запишись через ВК, Telegram или по телефону.",
   keywords: [
     "танцы Пермь",
     "школа танцев",
     "VIBES",
     "vibes dance",
-    "бесплатное пробное занятие",
+    "пробное занятие",
     "hip hop Пермь",
     "high heels",
     "choreo",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "VIBES Dance — Школа танцев в Перми",
     description:
-      "6 направлений: hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Первое занятие бесплатно.",
+      "6 направлений: hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Пробное занятие бесплатно.",
     type: "website",
     locale: "ru_RU",
     images: ["/images/cover-vk.jpg"],
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "VIBES Dance — Школа танцев в Перми",
     description:
-      "6 направлений: hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Первое занятие бесплатно.",
+      "6 направлений: hip hop, high heels, choreo, jazz funk, girly hip hop, contemporary. Пробное занятие бесплатно.",
   },
 };
 

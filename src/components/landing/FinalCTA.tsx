@@ -46,8 +46,8 @@ export function FinalCTA() {
         </h2>
 
         <p className="mx-auto mt-6 max-w-xl text-base text-white/75 sm:text-lg">
-          Приходи на одно занятие бесплатно — попробуй направление и
-          познакомься с командой. Подберём группу под твой уровень:
+          Приходи на пробное — попробуй направление и познакомься с
+          командой. Это бесплатно. Подберём группу под твой уровень:
           для взрослых и детей.
         </p>
 
@@ -65,7 +65,7 @@ export function FinalCTA() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-4">
-          <ContactButton size="lg" context="finalcta" modalTitle="Записаться на бесплатное пробное занятие">
+          <ContactButton size="lg" context="finalcta" modalTitle="Записаться на пробное занятие">
             Записаться на пробное
           </ContactButton>
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/45">

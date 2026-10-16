@@ -58,8 +58,7 @@ export function Footer() {
             </p>
             <a href="#about" className="text-sm text-white/70 transition-colors hover:text-[#e91e8c]">О студии</a>
             <a href="#styles" className="text-sm text-white/70 transition-colors hover:text-[#e91e8c]">Направления</a>
-            <a href="#schedule" className="text-sm text-white/70 transition-colors hover:text-[#e91e8c]">Программа ДОД</a>
-            <a href="#promo" className="text-sm text-white/70 transition-colors hover:text-[#e91e8c]">Акции</a>
+            <a href="#join" className="text-sm text-white/70 transition-colors hover:text-[#e91e8c]">Записаться</a>
           </nav>
 
           {/* Contacts — tracked as button_click */}

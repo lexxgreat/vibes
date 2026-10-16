@@ -56,8 +56,8 @@ export function AboutSection() {
             </p>
             <p>
               Группы для взрослых и для детей, разные уровни подготовки —
-              от первых шагов до уверенных профи. Приходи попробовать, первое
-              занятие бесплатно.
+              от первых шагов до уверенных профи. Приходи на пробное
+              занятие, это бесплатно.
             </p>
           </div>
 
@@ -72,7 +72,8 @@ export function AboutSection() {
             <div>
               <div className="font-display text-3xl text-[#e91e8c]">0₽</div>
               <div className="mt-1 font-display text-[11px] uppercase tracking-[0.2em] text-white/50">
-                первое занятие
+                пробное
+                <br />занятие
               </div>
             </div>
             <div>
@@ -85,7 +86,7 @@ export function AboutSection() {
           </div>
 
           <div className="mt-8">
-            <ContactButton size="md" context="about" modalTitle="Записаться на бесплатное пробное занятие">
+            <ContactButton size="md" context="about" modalTitle="Записаться на пробное занятие">
               Хочу на пробное
             </ContactButton>
           </div>

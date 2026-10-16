@@ -14,9 +14,9 @@ export const STUDIO = {
   vkGroupUrl: "https://vk.ru/vbsdanceperm",
   telegramHandle: "vibesmnd",
   telegramUrl: "https://t.me/vibesmnd",
-  offer: "Бесплатное пробное занятие",
+  offer: "Пробное занятие бесплатно",
   offerDescription:
-    "Приходи на одно занятие бесплатно — попробуй направление и познакомься с командой. Без обязательств.",
+    "Приходи на пробное занятие — попробуй направление и познакомься с командой. Это бесплатно и ни к чему не обязывает.",
   phoneDisplay: "+7 (912) 487-01-70",
   phoneRaw: "+79124870170",
   phoneTel: "+79124870170",
